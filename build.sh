@@ -1,4 +1,7 @@
 #!/bin/bash
 
-image_name="legoloam"
-docker build -t $image_name:latest .
+image="legoloam"
+tag="latest"
+
+docker build . \
+    -t $image:$tag
