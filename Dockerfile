@@ -34,9 +34,17 @@ RUN apt-get update && \
 		ros-melodic-pcl-ros \
 		ros-melodic-rviz
 ## build
-RUN cd ~/catkin_ws/src &&\
+RUN cd ~/catkin_ws/src && \
 	git clone https://github.com/RobustFieldAutonomyLab/LeGO-LOAM.git && \
-	cd ~/catkin_ws &&\
+	cd ~/catkin_ws && \
+	/bin/bash -c "source /opt/ros/melodic/setup.bash; catkin_make -j $(nproc --all)"
+## fix
+RUN cd ~/catkin_ws/src/LeGO-LOAM && \
+	grep -rl "\/camera_init" . | xargs sed -i 's/"\/camera_init"/"camera_init"/g' && \
+	grep -rl "\/laser_odom" . | xargs sed -i 's/"\/laser_odom"/"laser_odom"/g' && \
+	grep -rl "\/camera" . | xargs sed -i 's/"\/camera"/"camera"/g' && \
+	grep -rl "\/aft_mapped" . | xargs sed -i 's/"\/aft_mapped"/"aft_mapped"/g' && \
+	cd ~/catkin_ws && \
 	/bin/bash -c "source /opt/ros/melodic/setup.bash; catkin_make -j $(nproc --all)"
 ########## Optional packages ##########
 ## Velodyne driver
